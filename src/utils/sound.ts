@@ -65,7 +65,8 @@ class SoundAndVoiceEngine {
     });
   }
 
-  public playSlideTransition() {
+  public playSlideWhooshAndBass() { this.playSlideTransition(); }
+  playSlideTransition() {
     if (!this.enabled) return;
     this.initContext();
     if (!this.ctx) return;

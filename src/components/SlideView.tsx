@@ -1,472 +1,581 @@
-import React, { useState } from 'react';
-import { motion } from 'framer-motion';
+import React, { useState } from
+'react';
 import * as Icons from 'lucide-react';
-import { SlideData, PRESENTATION_META, WORK_PLAN_STEPS } from '../data/slides';
-import { AnimatedCounter } from './AnimatedCounter';
+import { SlideData } from
+'../data/slides';
+import { PRESENTATION_CONFIG, WORK_PLAN_DATA } from
+'../data/config';
 import { soundEngine } from '../utils/sound';
 
-interface SlideViewProps {
-  slide: SlideData;
-  onSelectSlide: (index: number) => void;
-  clearTextMode: boolean;
-  onChangeAiScale: (scale: number) => void;
-  dilemmaChoice: 'bright' | 'dark';
-  onChangeDilemma: (choice: 'bright' | 'dark') => void;
+interface
+SlideViewProps {
+ slide: SlideData;
+ onSelectSlide: (index: number) => void;
+
+clearTextMode: boolean;
+ onChangeAiScale: (scale: number) => void;
+
+dilemmaChoice: 'bright' | 'dark';
+ onChangeDilemma: (choice: 'bright' | 'dark')
+=> void;
 }
 
-// Formate les mots entourés d'astérisques en gras bleu glacé #A9D4FF
 const formatHighlightedText = (text: string) => {
-  const parts = text.split(/(\*[^*]+\*)/g);
-  return parts.map((part, i) => {
-    if (part.startsWith('*') && part.endsWith('*')) {
-      return (
-        <strong key={i} className="text-[#A9D4FF] font-bold">
-          {part.slice(1, -1)}
-        </strong>
-      );
-    }
-    return <span key={i}>{part}</span>;
-  });
+ const parts =
+text.split(/([^*]+)/g);
+ return parts.map((part, i) => {
+ if
+(part.startsWith('') && part.endsWith('')) {
+ return (
+ <strong key={i}
+className="text-[#A9D4FF] font-bold">
+ {part.slice(1, -1)}
+ 
+ );
+ }
+ return
+{part};
+ });
 };
 
 const renderDynamicIcon = (iconName?: string) => {
-  if (!iconName) return <Icons.Cpu className="w-7 h-7 text-blueCyan shrink-0" />;
-  const IconComp =
-    (Icons as Record<string, React.ComponentType<{ className?: string }>>)[iconName] || Icons.Cpu;
-  return <IconComp className="w-7 h-7 text-blueCyan shrink-0" />;
+ if
+(!iconName) return <Icons.Cpu className="w-5 h-5 text-blueCyan shrink-0" />;
+
+const IconComp =
+ (Icons as Record<string, React.ComponentType<{ className?:
+string }>>)[iconName] || Icons.Cpu;
+ return <IconComp className="w-5 h-5
+text-blueCyan shrink-0" />;
 };
 
-export const SlideView: React.FC<SlideViewProps> = ({
-  slide,
-  onSelectSlide,
-  clearTextMode,
-  onChangeAiScale,
-  dilemmaChoice,
-  onChangeDilemma,
+export const SlideContentColumn: React.FC =
+({
+ slide,
+ onSelectSlide,
+ clearTextMode,
+ onChangeAiScale,
+
+dilemmaChoice,
+ onChangeDilemma,
 }) => {
-  const [selectedLevel, setSelectedLevel] = useState(1);
-  const words = slide.title.split(' ');
+ const [selectedLevel,
+setSelectedLevel] = useState(1);
 
-  return (
-    <motion.div
-      key={slide.id}
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: clearTextMode ? 0.15 : 0.45 }}
-      className="relative z-10 w-full h-full flex flex-col justify-center px-6 sm:px-12 lg:px-20 pt-20 pb-24 overflow-y-auto"
-    >
-      <div className="max-w-7xl w-full mx-auto space-y-6">
-        {/* BARRE DE DIALOGUE D'AURA (Toujours stable, grande et lisible en haut) */}
-        <div className="hud-panel px-6 py-4 rounded-2xl border-l-4 border-l-blueCyan flex flex-wrap items-center justify-between gap-4 max-w-5xl">
-          <div className="flex items-center gap-4">
-            <div className="w-10 h-10 rounded-full bg-blueElectric/30 border-2 border-blueCyan flex items-center justify-center shrink-0 shadow-glow">
-              <Icons.Sparkles className="w-5 h-5 text-white" />
-            </div>
-            <div>
-              <span className="font-title text-hud-min text-blueCyan font-bold tracking-wider uppercase block">
-                IA NARRATRICE // AURA
-              </span>
-              <p className="text-hud-body text-white font-semibold">{slide.auraQuote}</p>
-            </div>
-          </div>
+ return (
+ <div
+ onClick={(e) =>
+e.stopPropagation()}
+ className={scene-card-col h-full min-h-0 overflow-y-auto
+cyber-card p-5 flex flex-col justify-between ${
+ slide.isFictional ?
+'cyber-card-fictional' : ''
+ }}
+ >
+ <div className="space-y-4">
+ <div
+className="flex flex-wrap items-center justify-between gap-2 border-b
+border-blueCyan/25 pb-2.5">
+ <span className="txt-badge
+text-blueIce">{slide.sceneCode}
+ {slide.isFictional && (
+ <span
+className="txt-badge px-2.5 py-0.5 rounded badge-fictional">
+ ★ SCÉNARIO
+FICTIF
+ 
+ )}
+ 
 
-          {slide.isFictional && (
-            <span className="px-4 py-1.5 rounded-full bg-blueElectric text-white font-title text-hud-min font-bold tracking-wider uppercase shadow-glow">
-              ★ SCÉNARIO FICTIF
-            </span>
-          )}
-        </div>
+ {slide.layout === 'prologue' && (
+ <div
+className="font-title text-[52px] font-black text-blueCyan leading-none
+tracking-tight">
+ {PRESENTATION_CONFIG.yearHero}
+ 
+ )}
 
-        {/* EN-TÊTE DE LA SLIDE DANS UN PANNEAU SOMBRE OPAQUE (90%) */}
-        <div className="hud-panel p-6 sm:p-8 rounded-2xl max-w-5xl">
-          <div className="flex flex-wrap items-center gap-3 mb-3">
-            <span className="w-3 h-3 rounded-full bg-blueCyan" />
-            <span className="font-title text-hud-min text-blueIce tracking-widest uppercase font-bold">
-              {slide.section}
-            </span>
-          </div>
+ <h1
+className={txt-title text-white ${clearTextMode ? '' : 'glitch-once'}}>
 
-          {slide.layout === 'prologue' && (
-            <div className="font-title text-[64px] sm:text-[92px] font-black text-blueCyan text-glow leading-none mb-2">
-              {PRESENTATION_META.yearHero}
-            </div>
-          )}
+{slide.title}
+ 
 
-          {/* Titre >= 56px sur ordinateur, net en moins de 0.7s */}
-          <h1 className="font-title text-hud-title text-white tracking-tight mb-4 flex flex-wrap gap-x-4 gap-y-1">
-            {words.map((word, idx) => (
-              <motion.span
-                key={idx}
-                initial={clearTextMode ? false : { opacity: 0, y: 16, filter: 'blur(6px)' }}
-                animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-                transition={{ duration: 0.45, delay: clearTextMode ? 0 : idx * 0.04 }}
-                className={idx >= words.length - 2 ? 'text-blueCyan text-glow' : 'text-white'}
-              >
-                {word}
-              </motion.span>
-            ))}
-          </h1>
+ <p className="txt-subtitle
+text-[#E8EEF9]">{slide.subtitle}
 
-          {/* Sous-titre >= 32px sur ordinateur */}
-          <p className="text-hud-subtitle text-[#E8EEF9]">{slide.subtitle}</p>
-        </div>
+ {slide.layout === 'prologue' && (
+ <div
+className="space-y-2.5 pt-2">
+ <div className="p-3.5 rounded-lg bg-[#05070D]/90
+border-l-4 border-l-blueElectric">
+ <span className="txt-badge text-blueIce
+block">PRÉSENTATEURS
+ <p className="txt-card text-white font-bold">
 
-        {/* 1. PROLOGUE : MÉTADONNÉES ÉLÈVE / CLASSE / DATE */}
-        {slide.layout === 'prologue' && (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5 max-w-5xl">
-            <div className="hud-panel p-6 rounded-2xl border-l-4 border-l-blueElectric">
-              <p className="font-title text-hud-min text-blueIce uppercase mb-1">Présenté par</p>
-              <p className="text-hud-body text-white font-bold">{PRESENTATION_META.authors}</p>
-            </div>
-            <div className="hud-panel p-6 rounded-2xl border-l-4 border-l-blueCyan">
-              <p className="font-title text-hud-min text-blueIce uppercase mb-1">Classe</p>
-              <p className="text-hud-body text-white font-bold">{PRESENTATION_META.classLevel}</p>
-            </div>
-            <div className="hud-panel p-6 rounded-2xl border-l-4 border-l-blueIce">
-              <p className="font-title text-hud-min text-blueIce uppercase mb-1">Date</p>
-              <p className="text-hud-body text-white font-bold">{PRESENTATION_META.date}</p>
-            </div>
-          </div>
-        )}
+{PRESENTATION_CONFIG.presenter1Name} (Présentateur 1) •
+{PRESENTATION_CONFIG.presenter2Name} (Présentateur 2)
+ 
+ 
+ <div
+className="p-3.5 rounded-lg bg-[#05070D]/90 border-l-4 border-l-blueCyan">
 
-        {/* 2. MENU HOLOGRAPHIQUE À 6 PORTES (SLIDE 2) */}
-        {slide.layout === 'gates-menu' && slide.cards && (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 max-w-6xl">
-            {slide.cards.map((gate, i) => (
-              <motion.button
-                key={i}
-                onClick={() => {
-                  soundEngine.playBeep(740, 0.08);
-                  if (gate.targetSlide !== undefined) onSelectSlide(gate.targetSlide);
-                }}
-                initial={clearTextMode ? false : { opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: clearTextMode ? 0 : i * 0.08 }}
-                className="hud-panel p-6 rounded-2xl text-left hover:border-white transition-all group"
-              >
-                <div className="flex items-center justify-between mb-2">
-                  <span className="font-title text-hud-min text-blueCyan font-bold">
-                    {gate.tag}
-                  </span>
-                  <Icons.ArrowUpRight className="w-6 h-6 text-blueIce group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
-                </div>
-                <h2 className="font-title text-hud-body font-bold text-white mb-2">
-                  {gate.title}
-                </h2>
-                <p className="text-hud-min text-[#E8EEF9]">
-                  {formatHighlightedText(gate.description)}
-                </p>
-              </motion.button>
-            ))}
-          </div>
-        )}
+<span className="txt-badge text-blueIce block">ASSISTANTE VOCALE IA
+ <p
+className="txt-card text-white font-bold">
 
-        {/* 3. CARTES DE CONTENU (3 CARTES MAX, PHRASES COURTES <= 15 MOTS) */}
-        {slide.layout === 'cards' && slide.cards && (
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 max-w-6xl">
-            {slide.cards.map((card, idx) => (
-              <motion.div
-                key={idx}
-                initial={clearTextMode ? false : { opacity: 0, y: 24, scale: 0.96 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                transition={{ duration: 0.55, delay: clearTextMode ? 0 : idx * 0.12 }}
-                className="hud-panel p-7 rounded-2xl flex flex-col justify-between"
-              >
-                <div>
-                  <div className="flex items-center justify-between gap-2 mb-4">
-                    <div className="p-3 rounded-xl bg-blueElectric/25 border border-blueCyan">
-                      {renderDynamicIcon(card.icon)}
-                    </div>
-                    {card.tag && (
-                      <span
-                        className={`px-3 py-1 rounded-lg font-title text-hud-min font-bold ${
-                          card.isFictional
-                            ? 'bg-blueElectric text-white'
-                            : 'bg-blueElectric/25 text-blueIce'
-                        }`}
-                      >
-                        {card.tag}
-                      </span>
-                    )}
-                  </div>
-                  <h2 className="font-title text-hud-body font-bold text-white mb-3">
-                    {card.title}
-                  </h2>
-                  <p className="text-hud-body text-[#E8EEF9]">
-                    {formatHighlightedText(card.description)}
-                  </p>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        )}
+{PRESENTATION_CONFIG.assistantVoiceDesc}
+ 
+ 
+ <div className="p-3.5
+rounded-lg bg-[#05070D]/90 border-l-4 border-l-blueIce">
+ <span
+className="txt-badge text-blueIce block">CLASSE & SESSION
+ <p
+className="txt-card text-white">
+ {PRESENTATION_CONFIG.classLevel} •
+{PRESENTATION_CONFIG.date}
+ 
+ 
+ 
+ )}
 
-        {/* 4. VOYAGE DANS LE TEMPS (1950 -> 2030) */}
-        {slide.layout === 'timeline-history' && slide.timeline && (
-          <div className="grid grid-cols-1 md:grid-cols-5 gap-4 max-w-6xl">
-            {slide.timeline.map((item, idx) => (
-              <motion.div
-                key={idx}
-                initial={clearTextMode ? false : { opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: clearTextMode ? 0 : idx * 0.1 }}
-                className="hud-panel p-6 rounded-2xl border-t-4 border-t-blueCyan"
-              >
-                <div className="font-title text-hud-subtitle font-black text-blueCyan mb-2">
-                  {item.year}
-                </div>
-                <h2 className="font-title text-hud-body font-bold text-white mb-2">
-                  {item.title}
-                </h2>
-                <p className="text-hud-min text-[#E8EEF9]">
-                  {formatHighlightedText(item.description)}
-                </p>
-              </motion.div>
-            ))}
-          </div>
-        )}
+ {slide.layout === 'gates-menu' &&
+slide.cards && (
+ <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5
+pt-1">
+ {slide.cards.map((gate, i) => (
+ <button
+ key={i}
+ onClick={() =>
+{
+ soundEngine.playBeep(740, 0.06);
+ if (gate.targetSlide !== undefined)
+onSelectSlide(gate.targetSlide);
+ }}
+ className="p-3 rounded-lg
+bg-[#05070D]/90 border border-blueCyan/35 hover:border-white text-left
+transition-all"
+ >
+ <div className="flex items-center justify-between mb-1">
 
-        {/* 5. LES 3 NIVEAUX D'IA INTERACTIFS (SLIDE 6) */}
-        {slide.layout === 'ai-levels' && slide.levels && (
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 max-w-6xl">
-            {slide.levels.map((lvl, idx) => {
-              const isSelected = selectedLevel === idx;
-              return (
-                <button
-                  key={idx}
-                  onClick={() => {
-                    setSelectedLevel(idx);
-                    onChangeAiScale(lvl.scale);
-                    soundEngine.playBeep(520 + idx * 180, 0.1);
-                  }}
-                  className={`p-7 rounded-2xl text-left transition-all ${
-                    isSelected ? 'hud-panel-active' : 'hud-panel hover:border-white'
-                  }`}
-                >
-                  <div className="flex items-center justify-between mb-3">
-                    <span className="font-title text-hud-min font-bold text-blueCyan">
-                      {lvl.level}
-                    </span>
-                    <span className="px-3 py-1 rounded-lg bg-blueElectric/30 font-title text-hud-min text-white font-bold">
-                      {lvl.tag}
-                    </span>
-                  </div>
-                  <h2 className="font-title text-hud-body font-bold text-white mb-3">
-                    {lvl.name}
-                  </h2>
-                  <p className="text-hud-body text-[#E8EEF9] mb-5">
-                    {formatHighlightedText(lvl.description)}
-                  </p>
-                  <div className="pt-3 border-t border-blueCyan/30 flex items-center justify-between">
-                    <span className="font-title text-hud-min text-blueIce">PUISSANCE COGNITIVE</span>
-                    <span className="font-title text-hud-body font-black text-blueCyan">
-                      <AnimatedCounter target={lvl.gauge} suffix=" %" />
-                    </span>
-                  </div>
-                </button>
-              );
-            })}
-          </div>
-        )}
+<span className="txt-badge text-blueCyan">{gate.tag}
+ <Icons.ArrowUpRight
+className="w-4 h-4 text-blueIce" />
+ 
+ <h2 className="txt-card font-bold
+text-white">{gate.title}
+ <p className="txt-card
+text-[#E8EEF9]">{formatHighlightedText(gate.description)}
+ 
+ ))}
+ 
+ )}
 
-        {/* 6. LE DILEMME INTERACTIF (SLIDE 14 : FUTUR LUMINEUX VS SOMBRE) */}
-        {slide.layout === 'dilemma' && slide.dilemma && (
-          <div className="space-y-5 max-w-5xl">
-            <div className="flex flex-wrap gap-4">
-              <button
-                onClick={() => {
-                  onChangeDilemma('bright');
-                  soundEngine.playBeep(880, 0.1);
-                }}
-                className={`px-6 py-4 rounded-2xl font-title text-hud-body font-bold transition-all ${
-                  dilemmaChoice === 'bright'
-                    ? 'bg-blueElectric text-white shadow-glowStrong border-2 border-white'
-                    : 'hud-panel text-blueIce'
-                }`}
-              >
-                ☀ Explorer le Futur Lumineux
-              </button>
-              <button
-                onClick={() => {
-                  onChangeDilemma('dark');
-                  soundEngine.playBeep(320, 0.12);
-                }}
-                className={`px-6 py-4 rounded-2xl font-title text-hud-body font-bold transition-all ${
-                  dilemmaChoice === 'dark'
-                    ? 'bg-blueElectric text-white shadow-glowStrong border-2 border-white'
-                    : 'hud-panel text-blueIce'
-                }`}
-              >
-                ⚡ Explorer le Futur Sombre
-              </button>
-            </div>
 
-            <div className="hud-panel-active p-8 rounded-2xl">
-              <h2 className="font-title text-hud-subtitle font-bold text-white mb-2">
-                {dilemmaChoice === 'bright' ? slide.dilemma.bright.title : slide.dilemma.dark.title}
-              </h2>
-              <p className="text-hud-body text-blueIce mb-5">
-                {dilemmaChoice === 'bright'
-                  ? slide.dilemma.bright.subtitle
-                  : slide.dilemma.dark.subtitle}
-              </p>
-              <ul className="space-y-4">
-                {(dilemmaChoice === 'bright'
-                  ? slide.dilemma.bright.points
-                  : slide.dilemma.dark.points
-                ).map((pt, i) => (
-                  <li key={i} className="flex items-center gap-4 text-hud-body text-white">
-                    <span className="w-3.5 h-3.5 rounded-full bg-blueCyan shrink-0" />
-                    <span>{formatHighlightedText(pt)}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-        )}
+{slide.layout === 'cards' && slide.cards && (
+ <div className="space-y-2.5
+pt-1">
+ {slide.cards.map((card, idx) => (
+ <div
+ key={idx}
+ className={p-3.5
+rounded-lg bg-[#05070D]/90 border ${
+ card.isFictional ? 'border-[#B026FF]' :
+'border-blueCyan/35'
+ }}
+ >
+ <div className="flex items-center
+justify-between gap-2 mb-1">
+ <div className="flex items-center gap-2">
 
-        {/* 7. AVANTAGES VS INCONVÉNIENTS (SLIDE 15) */}
-        {slide.layout === 'comparison' && slide.comparison && (
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 max-w-6xl">
-            <div className="hud-panel-active p-7 rounded-2xl">
-              <h2 className="font-title text-hud-subtitle font-bold text-white mb-5 flex items-center gap-3">
-                <Icons.CheckCircle2 className="w-8 h-8 text-blueCyan shrink-0" />
-                <span>AVANTAGES MAJEURS</span>
-              </h2>
-              <div className="space-y-4">
-                {slide.comparison.pros.map((p, i) => (
-                  <div key={i} className="p-4 rounded-xl bg-bgMain/80 border border-blueCyan/30">
-                    <h3 className="font-title text-hud-body font-bold text-white">{p.title}</h3>
-                    <p className="text-hud-min text-[#E8EEF9]">{formatHighlightedText(p.desc)}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
+{renderDynamicIcon(card.icon)}
+ <h2 className="txt-card font-bold
+text-white">{card.title}
+ 
+ {card.tag && (
+ <span
+ className={txt-badge px-2
+py-0.5 rounded ${
+ card.isFictional ? 'badge-fictional' : 'bg-blueElectric/25
+text-blueIce'
+ }}
+ >
+ {card.tag}
+ 
+ )}
+ 
+ <p className="txt-card
+text-[#E8EEF9]">
+ {formatHighlightedText(card.description)}
+ 
+ 
+ ))}
+ 
 
-            <div className="hud-panel p-7 rounded-2xl">
-              <h2 className="font-title text-hud-subtitle font-bold text-white mb-5 flex items-center gap-3">
-                <Icons.AlertOctagon className="w-8 h-8 text-blueIce shrink-0" />
-                <span>INCONVÉNIENTS & RISQUES</span>
-              </h2>
-              <div className="space-y-4">
-                {slide.comparison.cons.map((c, i) => (
-                  <div key={i} className="p-4 rounded-xl bg-bgMain/80 border border-blueIce/30">
-                    <h3 className="font-title text-hud-body font-bold text-white">{c.title}</h3>
-                    <p className="text-hud-min text-[#E8EEF9]">{formatHighlightedText(c.desc)}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        )}
+)}
 
-        {/* 8. PLAN DE TRAVAIL EN 5 ÉTAPES (SLIDE 16 - HAUTE LISIBILITÉ) */}
-        {slide.layout === 'workplan' && (
-          <div className="space-y-5">
-            <div className="hidden lg:block h-2 w-full bg-bgCard rounded-full overflow-hidden border border-blueCyan/40">
-              <motion.div
-                initial={{ width: '0%' }}
-                animate={{ width: '80%' }}
-                transition={{ duration: 1.2 }}
-                className="h-full bg-gradient-to-r from-blueElectric via-blueCyan to-white"
-              />
-            </div>
+ {slide.layout === 'timeline-history' && slide.timeline && (
+ <div
+className="space-y-2 pt-1">
+ {slide.timeline.map((item, idx) => (
+ <div
 
-            <div className="grid grid-cols-1 lg:grid-cols-5 gap-4">
-              {WORK_PLAN_STEPS.map((step, idx) => {
-                const isDone = step.status === 'Terminé';
-                const isCurrent = step.status === 'En cours';
-                return (
-                  <motion.div
-                    key={step.number}
-                    initial={clearTextMode ? false : { opacity: 0, y: 24 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: clearTextMode ? 0 : idx * 0.12 }}
-                    className={`p-6 rounded-2xl flex flex-col justify-between ${
-                      isCurrent ? 'hud-panel-active' : 'hud-panel'
-                    }`}
-                  >
-                    <div>
-                      <div className="flex items-center justify-between mb-3">
-                        <span className="font-title text-hud-subtitle font-black text-blueCyan">
-                          {step.number}
-                        </span>
-                        {renderDynamicIcon(step.icon)}
-                      </div>
-                      <h2 className="font-title text-hud-body font-bold text-white mb-2">
-                        {step.title}
-                      </h2>
-                      <p className="text-hud-min text-[#E8EEF9] mb-4">
-                        {formatHighlightedText(step.description)}
-                      </p>
-                    </div>
+key={idx}
+ className="p-2.5 rounded-lg bg-[#05070D]/90 border-l-4
+border-l-blueCyan flex items-center justify-between gap-3"
+ >
+ 
+ <span
+className="txt-badge text-blueCyan mr-2">{item.year}
+ <strong
+className="txt-card text-white font-bold">{item.title}
+ <p className="txt-card
+text-[#E8EEF9]">
+ {formatHighlightedText(item.description)}
+ 
+ 
+ 
+ ))}
+ 
 
-                    <div className="pt-3 border-t border-blueCyan/30 flex flex-wrap items-center justify-between gap-2">
-                      <span className="text-hud-min text-blueIce font-bold">⏱ {step.duration}</span>
-                      <span
-                        className={`px-3 py-1 rounded-full font-title text-hud-min font-bold ${
-                          isDone
-                            ? 'bg-blueElectric text-white'
-                            : isCurrent
-                            ? 'bg-blueCyan text-bgMain animate-pulse'
-                            : 'bg-bgMain text-blueIce border border-blueIce/40'
-                        }`}
-                      >
-                        {step.status}
-                      </span>
-                    </div>
-                  </motion.div>
-                );
-              })}
-            </div>
-          </div>
-        )}
+)}
 
-        {/* 9. CONCLUSION FINALE D'AURA (SLIDE 17) */}
-        {slide.layout === 'conclusion' && (
-          <div className="hud-panel-active p-8 rounded-2xl max-w-4xl flex flex-col sm:flex-row items-center justify-between gap-6">
-            <div>
-              <h2 className="font-title text-hud-subtitle font-black text-white mb-2">
-                AVEZ-VOUS DES QUESTIONS ?
-              </h2>
-              <p className="text-hud-body text-blueIce">
-                Transmission d'AURA terminée — Merci pour votre écoute.
-              </p>
-            </div>
-            <button
-              onClick={() => onSelectSlide(0)}
-              className="px-6 py-4 rounded-xl bg-blueElectric hover:bg-blueCyan text-white font-title text-hud-min font-bold uppercase shadow-glow shrink-0"
-            >
-              Rejouer l'expérience
-            </button>
-          </div>
-        )}
+ {slide.layout === 'ai-levels' && slide.levels && (
+ <div
+className="space-y-2.5 pt-1">
+ {slide.levels.map((lvl, idx) => {
+ const active
+= selectedLevel === idx;
+ return (
+ <button
+ key={idx}
+ onClick={() => {
 
-        {/* 10. SOURCES & RÉFÉRENCES (SLIDE 18) */}
-        {slide.layout === 'sources' && slide.sources && (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 max-w-6xl">
-            {slide.sources.map((src, idx) => (
-              <a
-                key={idx}
-                href={src.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="hud-panel p-6 rounded-2xl hover:border-white transition-all block"
-              >
-                <div className="flex items-center justify-between mb-2">
-                  <span className="font-title text-hud-body font-bold text-blueCyan">
-                    {src.name}
-                  </span>
-                  <Icons.ExternalLink className="w-5 h-5 text-white" />
-                </div>
-                <p className="text-hud-min text-white font-bold mb-1">{src.org}</p>
-                <p className="text-hud-min text-[#E8EEF9]">{formatHighlightedText(src.desc)}</p>
-              </a>
-            ))}
-          </div>
-        )}
-      </div>
-    </motion.div>
-  );
+setSelectedLevel(idx);
+ onChangeAiScale(lvl.scale);
+ soundEngine.playBeep(500
++ idx * 180, 0.08);
+ }}
+ className={w-full p-3.5 rounded-lg text-left
+transition-all border ${
+ active
+ ? 'bg-blueElectric/25 border-white
+shadow-glow'
+ : 'bg-[#05070D]/90 border-blueCyan/35 hover:border-blueCyan'
+
+}}
+ >
+ <div className="flex items-center justify-between mb-1">
+ <span
+className="txt-badge text-blueCyan">
+ {lvl.level} — {lvl.name}
+ 
+ <span
+
+className={txt-badge px-2 py-0.5 rounded ${
+ lvl.tag.includes('FICTIF')
+ ?
+'badge-fictional'
+ : 'bg-blueElectric/30 text-white'
+ }}
+ >
+ {lvl.tag}
+ 
+
+
+ <p className="txt-card text-[#E8EEF9] mb-2">
+
+{formatHighlightedText(lvl.description)}
+ 
+ <div className="w-full h-2
+bg-[#05070D] rounded-full overflow-hidden">
+ <div
+ className="h-full
+bg-gradient-to-r from-blueElectric to-blueCyan"
+ style={{ width: ${lvl.gauge}%
+}}
+ />
+ 
+ 
+ );
+ })}
+ 
+ )}
+
+ {slide.layout === 'dilemma' &&
+slide.dilemma && (
+ <div className="space-y-3 pt-1">
+ <div className="grid
+grid-cols-2 gap-2">
+ <button
+ onClick={() => {
+ onChangeDilemma('bright');
+
+soundEngine.playBeep(880, 0.08);
+ }}
+ className={p-2.5 rounded-lg txt-badge
+text-center border transition-all ${
+ dilemmaChoice === 'bright'
+ ?
+'bg-blueElectric text-white border-white'
+ : 'bg-[#05070D] text-blueIce
+border-blueCyan/35'
+ }}
+ >
+ ☀ FUTUR LUMINEUX
+ 
+ <button
+ onClick={() =>
+{
+ onChangeDilemma('dark');
+ soundEngine.playBeep(320, 0.1);
+ }}
+
+className={p-2.5 rounded-lg txt-badge text-center border transition-all ${
+
+dilemmaChoice === 'dark'
+ ? 'badge-fictional'
+ : 'bg-[#05070D] text-blueIce
+border-blueCyan/35'
+ }}
+ >
+ ⚡ FUTUR SOMBRE
+ 
+ 
+
+ <div className="p-4
+rounded-lg bg-[#05070D]/90 border border-blueCyan/40 space-y-2">
+ <h2
+className="txt-card font-bold text-white">
+ {dilemmaChoice === 'bright' ?
+slide.dilemma.bright.title : slide.dilemma.dark.title}
+ 
+ <p
+className="txt-card text-blueIce">
+ {dilemmaChoice === 'bright'
+ ?
+slide.dilemma.bright.subtitle
+ : slide.dilemma.dark.subtitle}
+ 
+ <ul
+className="space-y-1.5 pt-1">
+ {(dilemmaChoice === 'bright'
+ ?
+slide.dilemma.bright.points
+ : slide.dilemma.dark.points
+ ).map((pt, i) => (
+
+<li key={i} className="txt-card text-white flex items-start gap-2">
+ <span
+className="text-blueCyan font-bold">▸
+ {formatHighlightedText(pt)}
+ 
+ ))}
+
+
+ 
+ 
+ )}
+
+ {slide.layout === 'comparison' && slide.comparison && (
+ <div
+className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+ <div className="p-3
+rounded-lg bg-[#05070D]/90 border border-blueCyan/40 space-y-2">
+ <span
+className="txt-badge text-blueCyan block">✓ AVANTAGES
+
+{slide.comparison.pros.map((p, i) => (
+ 
+ <strong className="txt-card
+text-white font-bold block">{p.title}
+ <p className="txt-card
+text-[#E8EEF9]">{formatHighlightedText(p.desc)}
+ 
+ ))}
+ 
+ <div
+className="p-3 rounded-lg bg-[#05070D]/90 border border-[#B026FF]/60
+space-y-2">
+ <span className="txt-badge text-[#E8EEF9] block">⚠ INCONVÉNIENTS
+
+{slide.comparison.cons.map((c, i) => (
+ 
+ <strong className="txt-card
+text-white font-bold block">{c.title}
+ <p className="txt-card
+text-[#E8EEF9]">{formatHighlightedText(c.desc)}
+ 
+ ))}
+ 
+ 
+ )}
+
+
+{slide.layout === 'workplan' && (
+ <div className="p-4 rounded-lg
+bg-[#05070D]/90 border border-blueCyan/40 space-y-2">
+ <span
+className="txt-badge text-blueCyan block">MÉTHODOLOGIE EN 5 ÉTAPES
+ <p
+className="txt-card text-white">
+ Répartition équilibrée 50/50 entre{' '}
+
+<strong className="text-[#A9D4FF]">{PRESENTATION_CONFIG.presenter1Name}
+(Présentateur 1) et{' '}
+ <strong
+className="text-[#A9D4FF]">{PRESENTATION_CONFIG.presenter2Name}
+(Présentateur 2).
+ 
+ <p className="txt-card text-blueIce">
+ Consultez les 5
+cartes d'étapes et leurs badges de statut alignés ci-dessous.
+ 
+ 
+ )}
+
+
+{slide.layout === 'conclusion' && (
+ <div className="space-y-3 pt-1">
+ <div
+className="p-4 rounded-lg bg-[#05070D]/90 border-l-4 border-l-blueCyan">
+ <h2
+className="txt-card font-bold text-white mb-1">1. Le message d'AURA
+ <p
+className="txt-card text-[#E8EEF9]">
+ L'IA est un formidable accélérateur
+scientifique, mais l'éthique et la décision
+ appartiennent toujours à l'être
+humain.
+ 
+ 
+ <div className="p-4 rounded-lg bg-blueElectric/20 border
+border-blueCyan">
+ <h2 className="txt-subtitle font-bold text-white mb-1">
+
+MERCI ! AVEZ-VOUS DES QUESTIONS ?
+ 
+ <p className="txt-card text-blueIce
+mb-3">
+ Présentation réalisée par {PRESENTATION_CONFIG.presenter1Name}
+(Présentateur 1) &{' '}
+ {PRESENTATION_CONFIG.presenter2Name}
+(Présentateur 2).
+ 
+ <button
+ onClick={() => onSelectSlide(0)}
+
+className="px-4 py-2 rounded-lg bg-blueElectric hover:bg-blueCyan text-white
+txt-badge transition-colors"
+ >
+ ↺ Revenir à la Scène 01
+ 
+ 
+ 
+ )}
+
+
+{slide.layout === 'sources' && slide.sources && (
+ <div className="grid
+grid-cols-1 sm:grid-cols-2 gap-2.5 pt-1">
+ {slide.sources.map((src, idx) => (
+
+<a
+ key={idx}
+ href={src.url}
+ target="_blank"
+ rel="noopener noreferrer"
+
+className="p-3 rounded-lg bg-[#05070D]/90 border border-blueCyan/35
+hover:border-white block"
+ >
+ <div className="flex items-center
+justify-between">
+ <span className="txt-badge text-blueCyan">{src.name}
+
+<Icons.ExternalLink className="w-4 h-4 text-blueIce" />
+ 
+ <p
+className="txt-card text-white font-semibold">{src.org}
+ <p className="txt-card
+text-[#E8EEF9]">{formatHighlightedText(src.desc)}
+ 
+ ))}
+ 
+ )}
+ 
+
+ <div
+className="pt-3 mt-3 border-t border-blueCyan/20 flex items-center
+justify-between text-[14px] text-blueIce/80 font-title">
+ DURÉE SCÈNE :
+{slide.duration}
+ {PRESENTATION_CONFIG.telemetryCode}
+ 
+ 
+ );
+};
+
+export
+const WorkPlanHorizontalStrip: React.FC = () => {
+ return (
+ <div
+
+onClick={(e) => e.stopPropagation()}
+ className="col-span-full grid grid-cols-1
+sm:grid-cols-5 gap-3 pt-1"
+ >
+ {WORK_PLAN_DATA.map((item) => {
+ const isDone
+= item.status === 'Terminé';
+ const isCurrent = item.status === 'En cours';
+
+return (
+ <div
+ key={item.number}
+ className={cyber-card p-3 flex flex-col
+justify-between ${
+ isCurrent ? 'border-2 border-blueCyan' : ''
+ }}
+ >
+ 
+
+<div className="flex items-center justify-between gap-2 mb-1">
+ <span
+className="font-title text-[18px] font-black text-blueCyan">
+ {item.number}
+
+
+ {renderDynamicIcon(item.icon)}
+ 
+ <h3 className="txt-card font-bold
+text-white mb-0.5">{item.title}
+ <p className="txt-card text-[#E8EEF9]
+mb-2">{item.description}
+ 
+ <div className="pt-2 border-t border-blueCyan/25
+flex items-center justify-between gap-1">
+ <span className="txt-badge
+text-blueIce">⏱ {item.duration}
+ <span
+ className={txt-badge px-2 py-0.5
+rounded ${
+ isDone
+ ? 'bg-blueElectric text-white'
+ : isCurrent
+ ?
+'bg-blueCyan text-[#05070D] animate-pulse'
+ : 'bg-[#05070D] text-blueIce border
+border-blueIce/40'
+ }}
+ >
+ {item.status}
+ 
+ 
+ 
+ );
+ })}
+ 
+ );
 };
