@@ -47,7 +47,7 @@ export const SlideContentColumn: React.FC<SlideViewProps> = ({
   return (
     <div
       onClick={(e) => e.stopPropagation()}
-      className={`scene-card-col h-full min-h-0 overflow-y-auto cyber-card p-5 flex flex-col justify-between ${
+      className={`scene-card-col relative z-30 h-full min-h-0 overflow-y-auto cyber-card p-5 flex flex-col justify-between ${
         slide.isFictional ? 'cyber-card-fictional' : ''
       }`}
     >

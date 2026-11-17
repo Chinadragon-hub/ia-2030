@@ -79,8 +79,8 @@ const CameraAndParticles: React.FC<Scene3DProps> = ({
         <pointsMaterial color="#3DA5FF" size={0.06} transparent opacity={0.65} />
       </points>
 
-      {/* Modèles 3D positionnés en arrière-plan et décalés sur la gauche */}
-      <group position={[-0.9, 0, -1.4]}>
+      {/* Modèles 3D calés en arrière-plan profond (Z: -2.2) et décalés sur la gauche de l'espace ouvert (X: 0.85) */}
+      <group position={[0.85, 0, -2.2]} scale={0.82}>
         <ProceduralModels
           activeModel={activeModel}
           reducedMotion={reducedMotion}
@@ -95,7 +95,7 @@ const CameraAndParticles: React.FC<Scene3DProps> = ({
 
 export const Scene3D: React.FC<Scene3DProps> = (props) => {
   return (
-    <div className="fixed inset-0 z-0 pointer-events-none holo-grid">
+    <div className="fixed inset-0 pointer-events-none holo-grid" style={{ zIndex: 0 }}>
       <Canvas
         camera={{ position: [0, 0, 9], fov: 45 }}
         dpr={props.lowPerf ? [1, 1] : [1, 1.75]}
