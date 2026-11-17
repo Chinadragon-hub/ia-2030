@@ -55,11 +55,6 @@ export const CompactRegieBar: React.FC<RegieBarProps> = ({
   const slide = SLIDES_DATA[slideIndex] || SLIDES_DATA[0];
   const step = slide.steps[stepIndex] || slide.steps[0];
 
-  // À chaque nouvelle scène, le bandeau apparaît avec une animation fluide
-  useEffect(() => {
-    setDrawerOpen(true);
-  }, [slideIndex, setDrawerOpen]);
-
   return (
     <div
       onClick={(e) => e.stopPropagation()}
@@ -143,18 +138,21 @@ export const CompactRegieBar: React.FC<RegieBarProps> = ({
         ) : (
           <motion.button
             key="collapsed-pill"
-            initial={{ opacity: 0, y: 14, scale: 0.9 }}
+            initial={{ opacity: 0, y: 16, scale: 0.9 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 14, scale: 0.9 }}
-            transition={{ duration: 0.22, ease: 'easeOut' }}
+            exit={{ opacity: 0, y: 16, scale: 0.9 }}
+            transition={{ duration: 0.25, ease: 'easeOut' }}
             onClick={() => setDrawerOpen(true)}
-            className="pointer-events-auto px-4 py-1.5 rounded-full bg-[#0A1020]/95 border border-blueCyan/70 hover:border-white shadow-lg flex items-center gap-2.5 text-[13px] font-title text-white transition-colors"
+            title="Cliquer pour afficher le texte complet du prompteur"
+            className="pointer-events-auto px-4 py-1.5 rounded-full bg-[#0A1020]/95 border border-blueCyan/70 hover:border-white shadow-lg flex items-center gap-2.5 text-[13px] font-title text-white transition-colors cursor-pointer"
           >
             <MessageSquare className="w-4 h-4 text-blueCyan" />
             <span className="font-extrabold text-blueCyan">
-              💬 [{getSpeakerShortName(step.speaker)}]
+              [{getSpeakerShortName(step.speaker)}]
             </span>
-            <span className="text-blueIce">• Clic pour agrandir le prompteur</span>
+            <span className="text-blueIce">
+              {isAuraSpeaking ? '⏳ Voix AURA en cours…' : `Étape ${stepIndex + 1}/${slide.steps.length} • Clic pour agrandir`}
+            </span>
           </motion.button>
         )}
       </AnimatePresence>

@@ -166,7 +166,6 @@ export const App: React.FC = () => {
     setIsAuraSpeaking(false);
     setIsEndScreen(false);
     setStepIndex(0);
-    setDrawerOpen(true);
     soundEngine.playBeep(520, 0.08);
   }, []);
 

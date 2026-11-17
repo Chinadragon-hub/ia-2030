@@ -847,12 +847,12 @@ export const SLIDES_DATA: SlideData[] = [
       {
         id: 2,
         speaker: "LOUAY",
-        title: "Remerciements",
+        title: "Notre engagement",
         clickIndication: "[CLIC GAUCHE →]",
         shortHint: "→ clic",
-        speech: "Mahmoud Dammak et moi vous remercions pour votre attention ! Avez-vous des questions ?",
-        stageTip: "Saluer ensemble la classe.",
-        partnerAction: "Saluer avec Louay."
+        speech: "Construisons ensemble ce futur éthique et responsable avec discernement et intelligence !",
+        stageTip: "Regard confiant et résolu vers la classe.",
+        partnerAction: "Mahmoud acquiesce et prépare la diapositive des sources."
       }
     ]
   },
@@ -873,13 +873,23 @@ export const SLIDES_DATA: SlideData[] = [
     steps: [
       {
         id: 0,
-        speaker: "MAHMOUD",
-        title: "Sources et questions du public",
+        speaker: "LOUAY",
+        title: "Nos sources scientifiques",
         clickIndication: "[CLIC GAUCHE →]",
         shortHint: "→ clic",
-        speech: "Voici nos sources scientifiques officielles. Nous sommes à votre écoute pour toutes vos questions !",
-        stageTip: "Rester souriants face au public.",
-        partnerAction: "Louay répond aux questions avec Mahmoud."
+        speech: "Voici les institutions scientifiques officielles qui fondent l'ensemble de notre recherche.",
+        stageTip: "Pointer les organismes scientifiques (CNRS, INRIA, UNESCO) avec clarté.",
+        partnerAction: "Mahmoud s'apprête pour le mot de remerciement et le débat."
+      },
+      {
+        id: 1,
+        speaker: "MAHMOUD",
+        title: "Remerciements et débat",
+        clickIndication: "[CLIC GAUCHE →]",
+        shortHint: "→ clic",
+        speech: "Mahmoud Dammak et Louay Kouki vous remercient pour votre attention ! Avez-vous des questions ?",
+        stageTip: "Sourire chaleureux et ouverture des bras vers le public.",
+        partnerAction: "Louay salue la classe aux côtés de Mahmoud."
       }
     ],
     sources: [

@@ -74,12 +74,12 @@ export const KEY_MEMORABLE_PHRASES = {
     "Bonjour à tous ! Merci AURA. Avec Mahmoud Dammak, nous vous présentons l'IA en 2030.",
     "Posons une question simple : qu'est-ce que l'intelligence artificielle ?",
     "Voici les trois paliers : l'IA faible aujourd'hui, l'IA générale en 2030, puis la superintelligence.",
-    "Mahmoud Dammak et moi vous remercions pour votre attention ! Avez-vous des questions ?"
+    "Construisons ensemble ce futur éthique et responsable avec discernement et intelligence !"
   ],
   mahmoud: [
     "Aujourd'hui, avec Louay Kouki, découvrons nos vraies prévisions et les scénarios du futur !",
     "Comment réfléchit une IA ? Grâce aux données, aux algorithmes et aux réseaux de neurones !",
     "Avec mon smartphone, je demande à AURA de lancer la simulation de la cité 2030 !",
-    "Qui pense que nous réussirons à bâtir le futur lumineux en 2030 ? Levez la main !"
+    "Mahmoud Dammak et Louay Kouki vous remercient pour votre attention ! Avez-vous des questions ?"
   ]
 };
