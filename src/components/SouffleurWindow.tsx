@@ -55,10 +55,10 @@ export const CompactRegieBar: React.FC<RegieBarProps> = ({
   const slide = SLIDES_DATA[slideIndex] || SLIDES_DATA[0];
   const step = slide.steps[stepIndex] || slide.steps[0];
 
-  // À chaque nouvelle scène ou étape, le bandeau apparaît avec une animation fluide
+  // À chaque nouvelle scène, le bandeau apparaît avec une animation fluide
   useEffect(() => {
     setDrawerOpen(true);
-  }, [slideIndex, stepIndex, setDrawerOpen]);
+  }, [slideIndex, setDrawerOpen]);
 
   return (
     <div

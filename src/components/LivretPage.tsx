@@ -63,13 +63,23 @@ export const LivretPage: React.FC = () => {
             Livret de Répétition — Louay Kouki & Mahmoud Dammak
           </h1>
         </div>
-        <button
-          onClick={() => window.print()}
-          className="px-6 py-3.5 rounded-xl bg-[#1E6BFF] hover:bg-[#3DA5FF] text-white font-title text-base font-extrabold shadow-lg flex items-center gap-2.5 transition-all cursor-pointer"
-        >
-          <Printer className="w-5 h-5" />
-          <span>Télécharger le PDF</span>
-        </button>
+        <div className="flex items-center gap-3">
+          <a
+            href="/LIVRET_DE_REPETITION_IA_2030.pdf"
+            download="LIVRET_DE_REPETITION_IA_2030.pdf"
+            className="px-5 py-3 rounded-xl bg-[#0A1020] border border-blueCyan hover:border-white text-white font-title text-sm font-bold flex items-center gap-2 transition-all cursor-pointer"
+          >
+            <Printer className="w-4 h-4 text-blueCyan" />
+            <span>Fichier PDF Direct</span>
+          </a>
+          <button
+            onClick={() => window.print()}
+            className="px-6 py-3.5 rounded-xl bg-[#1E6BFF] hover:bg-[#3DA5FF] text-white font-title text-base font-extrabold shadow-lg flex items-center gap-2.5 transition-all cursor-pointer"
+          >
+            <Printer className="w-5 h-5" />
+            <span>Imprimer / Exporter</span>
+          </button>
+        </div>
       </div>
 
       {/* CONTENEUR DES PAGES A4 */}
@@ -132,7 +142,7 @@ export const LivretPage: React.FC = () => {
               1. Vue d'Ensemble & Déroulement Général
             </h2>
             <p className="text-xs leading-relaxed text-slate-800 mb-5">
-              Ce livret donne à Mahmoud Dammak (Présentateur 2) et Louay Kouki (Présentateur 1) la
+              Ce livret donne à Louay Kouki (Présentateur 1) et Mahmoud Dammak (Présentateur 2) la
               conduite exacte de leur présentation orale. Chaque réplique correspond rigoureusement
               au texte affiché dans le prompteur de l'application. Les indications de clic
               permettent de synchroniser les paroles avec les animations 3D sans la moindre
