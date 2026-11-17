@@ -179,11 +179,11 @@ export const SLIDES_DATA: SlideData[] = [
     ],
     cards: [
       { tag: "PORTE 01", title: "Fondations & Histoire", description: "Définition simple et *voyage de 1950 à 2030*.", targetSlide: 2 },
-      { tag: "PORTE 02", title: "3 Niveaux & Éveil", description: "De l'IA faible jusqu'à la *superintelligence*.", targetSlide: 5 },
+      { tag: "PORTE 02", title: "3 Niveaux & Éveil", description: "De l'IA faible jusqu'à la *superintelligence*.", targetSlide: 4 },
       { tag: "PORTE 03", title: "Vie en 2030", description: "Cité autonome, *santé du futur* et éducation.", targetSlide: 7 },
       { tag: "PORTE 04", title: "Espace & Hybride", description: "Exploration spatiale et *interface cerveau-machine*.", targetSlide: 10 },
       { tag: "PORTE 05", title: "Risques & Dilemme", description: "Contrôle, *deepfakes* et choix entre deux futurs.", targetSlide: 12 },
-      { tag: "PORTE 06", title: "Méthode & Sources", description: "Notre *plan de travail* et les références fiables.", targetSlide: 15 }
+      { tag: "PORTE 06", title: "Bilan & Épilogue", description: "L'Humain au centre : *décider de notre avenir*.", targetSlide: 15 }
     ]
   },
   {
@@ -774,51 +774,14 @@ export const SLIDES_DATA: SlideData[] = [
   {
     id: 16,
     sceneNumber: "SCÈNE 16",
-    sceneCode: "SCÈNE 16 // MÉTHODE",
-    shortName: "Plan de travail",
-    title: "NOTRE PLAN DE TRAVAIL",
-    subtitle: "Cinq étapes structurées pour concevoir cette présentation 3D.",
-    auraBanner: "« Méthodologie de Louay Kouki et Mahmoud Dammak. »",
-    duration: "20 secondes",
-    summary: "Les 5 étapes de réalisation du projet.",
-    criticalRule: "Montrer la bande des 5 étapes en bas.",
-    layout: "workplan",
-    model3D: "time-tunnel",
-    cameraPos: [0, 0.3, 6.5],
-    steps: [
-      {
-        id: 0,
-        speaker: "LOUAY",
-        title: "Recherches et textes",
-        clickIndication: "[CLIC GAUCHE →]",
-        shortHint: "→ clic",
-        speech: "Voici nos cinq étapes : recherches scientifiques, puis rédaction de textes clairs et équilibrés.",
-        stageTip: "Montrer les étapes 1 et 2.",
-        partnerAction: "Mahmoud prépare la suite."
-      },
-      {
-        id: 1,
-        speaker: "MAHMOUD",
-        title: "3D et répétitions",
-        clickIndication: "[CLIC GAUCHE →]",
-        shortHint: "→ clic",
-        speech: "Ensuite, création des modèles 3D et de la voix d'AURA, avant nos répétitions pour aujourd'hui !",
-        stageTip: "Montrer les étapes 3 à 5.",
-        partnerAction: "Se placer côte à côte pour conclure."
-      }
-    ]
-  },
-  {
-    id: 17,
-    sceneNumber: "SCÈNE 17",
-    sceneCode: "SCÈNE 17 // ÉPILOGUE",
+    sceneCode: "SCÈNE 16 // ÉPILOGUE",
     shortName: "Épilogue",
     title: "CONCLUSION : L'HUMAIN AU CENTRE",
     subtitle: "En 2030, la plus belle intelligence restera notre sagesse collective.",
     auraBanner: "« Le futur ne se prédit pas, il se construit. Ensemble. »",
     duration: "25 secondes",
-    summary: "Message final d'AURA et remerciements.",
-    criticalRule: "Attendre la fin de la voix d'AURA.",
+    summary: "Message final d'AURA, mot de la fin et ouverture des questions du public.",
+    criticalRule: "Un clic supplémentaire affiche l'écran de fin et permet de recommencer.",
     layout: "conclusion",
     model3D: "finale-earth",
     cameraPos: [0, 0, 6.2],
@@ -840,65 +803,20 @@ export const SLIDES_DATA: SlideData[] = [
         title: "Conclusion humaine",
         clickIndication: "[CLIC GAUCHE →]",
         shortHint: "→ clic",
-        speech: "La technologie propose, mais c'est toujours à l'être humain de décider !",
-        stageTip: "Ton inspirant.",
+        speech: "La technologie propose des outils extraordinaires, mais c'est toujours à l'humain de fixer le cap !",
+        stageTip: "Ton inspirant et confiant.",
         partnerAction: "Louay prépare le salut final."
       },
       {
         id: 2,
         speaker: "LOUAY",
-        title: "Notre engagement",
-        clickIndication: "[CLIC GAUCHE →]",
-        shortHint: "→ clic",
-        speech: "Construisons ensemble ce futur éthique et responsable avec discernement et intelligence !",
-        stageTip: "Regard confiant et résolu vers la classe.",
-        partnerAction: "Mahmoud acquiesce et prépare la diapositive des sources."
-      }
-    ]
-  },
-  {
-    id: 18,
-    sceneNumber: "SCÈNE 18",
-    sceneCode: "SCÈNE 18 // BIBLIOGRAPHIE",
-    shortName: "Sources",
-    title: "SOURCES ET RÉFÉRENCES",
-    subtitle: "Organismes scientifiques et institutionnels consultés.",
-    auraBanner: "« Sources officielles : CNRS, INRIA, UNESCO, CNIL, AI Act, CEA. »",
-    duration: "15 secondes",
-    summary: "Références officielles et ouverture des questions.",
-    criticalRule: "Un clic supplémentaire affiche l'écran de fin ou ramène au début.",
-    layout: "sources",
-    model3D: "finale-earth",
-    cameraPos: [0, 0, 6.5],
-    steps: [
-      {
-        id: 0,
-        speaker: "LOUAY",
-        title: "Nos sources scientifiques",
-        clickIndication: "[CLIC GAUCHE →]",
-        shortHint: "→ clic",
-        speech: "Voici les institutions scientifiques officielles qui fondent l'ensemble de notre recherche.",
-        stageTip: "Pointer les organismes scientifiques (CNRS, INRIA, UNESCO) avec clarté.",
-        partnerAction: "Mahmoud s'apprête pour le mot de remerciement et le débat."
-      },
-      {
-        id: 1,
-        speaker: "MAHMOUD",
         title: "Remerciements et débat",
         clickIndication: "[CLIC GAUCHE →]",
         shortHint: "→ clic",
         speech: "Mahmoud Dammak et Louay Kouki vous remercient pour votre attention ! Avez-vous des questions ?",
         stageTip: "Sourire chaleureux et ouverture des bras vers le public.",
-        partnerAction: "Louay salue la classe aux côtés de Mahmoud."
+        partnerAction: "Mahmoud salue la classe aux côtés de Louay."
       }
-    ],
-    sources: [
-      { name: "CNRS Le Journal", org: "Recherche Scientifique", desc: "Dossiers sur le *Deep Learning* et la robotique.", url: "https://lejournal.cnrs.fr" },
-      { name: "INRIA", org: "Sciences du Numérique", desc: "Ressources sur les *réseaux neuronaux*.", url: "https://www.inria.fr" },
-      { name: "UNESCO", org: "Nations Unies", desc: "Recommandation mondiale sur *l'éthique de l'IA*.", url: "https://www.unesco.org/fr/artificial-intelligence" },
-      { name: "CNIL", org: "Données Personnelles", desc: "Guides sur la *vie privée* et les deepfakes.", url: "https://www.cnil.fr" },
-      { name: "AI Act Européen", org: "Parlement Européen", desc: "Cadre légal européen sur les *IA à haut risque*.", url: "https://www.europarl.europa.eu" },
-      { name: "CEA", org: "Énergies & Calcul", desc: "Fiches sur le *calcul haute performance*.", url: "https://www.cea.fr" }
     ]
   }
 ];

@@ -607,7 +607,7 @@ export const App: React.FC = () => {
             <div>
               <div className="flex items-center justify-between pb-3 mb-4 border-b border-blueCyan/35">
                 <h2 className="font-title text-[18px] font-bold text-white">
-                  SOMMAIRE DES 18 SCÈNES
+                  SOMMAIRE DES 16 SCÈNES
                 </h2>
                 <button
                   onClick={() => setIsMenuOpen(false)}

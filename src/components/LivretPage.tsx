@@ -23,7 +23,7 @@ const getBookletSpeakerBadge = (role: SpeakerRole) => {
 };
 
 export const LivretPage: React.FC = () => {
-  const totalPages = SLIDES_DATA.length + 2; // Page 1 (Garde) + 18 Scènes + Page Finale (Aide-mémoire)
+  const totalPages = SLIDES_DATA.length + 2; // Page 1 (Garde) + 16 Scènes + Page Finale (Aide-mémoire)
 
   useEffect(() => {
     document.title = "Livret de Répétition et Guide Scénique Officiel — L'IA en 2030";
