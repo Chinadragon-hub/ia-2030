@@ -79,8 +79,8 @@ const CameraAndParticles: React.FC<Scene3DProps> = ({
         <pointsMaterial color="#3DA5FF" size={0.06} transparent opacity={0.65} />
       </points>
 
-      {/* Le modèle 3D est décalé à droite pour ne JAMAIS gêner la lecture du texte */}
-      <group position={[cameraTarget[0] > 1.8 ? 2.75 : 0, 0, 0]}>
+      {/* Modèles 3D positionnés en arrière-plan et décalés sur la gauche */}
+      <group position={[-0.9, 0, -1.4]}>
         <ProceduralModels
           activeModel={activeModel}
           reducedMotion={reducedMotion}

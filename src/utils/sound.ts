@@ -141,7 +141,13 @@ class SoundAndVoiceEngine {
     }
 
     this.playChime();
-    const cleanText = text.replace(/[«»*]/g, '').trim();
+    let cleanText = text.replace(/[«»*]/g, '').trim();
+    // Calibrage phonétique arabe précis pour synthèse vocale française :
+    // Louay (لؤي) -> 'Lou-aï' pour restituer fidèlement la coupure glottique et le 'y'
+    // Mahmoud (محمود) -> 'Mahmoude' pour vocaliser distinctement la consonne 'd' finale
+    cleanText = cleanText
+      .replace(/\bLouay\b/gi, 'Lou-aï')
+      .replace(/\bMahmoud\b/gi, 'Mahmoude');
     const utterance = new SpeechSynthesisUtterance(cleanText);
     utterance.lang = 'fr-FR';
     if (this.preferredVoice) {
